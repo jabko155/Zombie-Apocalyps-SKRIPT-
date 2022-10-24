@@ -1,0 +1,364 @@
+
+on load:
+    trigger:
+        set {sa} to false
+
+
+command /startapo:
+    permission: op
+    trigger:
+        if {sa} is true:
+            message "&6&lThis action cannot be performed, the game is already running!"
+        if {sa} is false:
+            set {sa} to true
+            set {zc} to true
+            loop all players:
+                teleport loop-player to {apospawn}
+                remove all items from loop-player's inventory
+                message "&6&lWelcome on Zombie Apocalyps" to loop-player
+                message "&6 - You got a &7&lBasic sword " to loop-player
+                message "&6 - You got a &c&lBandages" to loop-player
+                give wooden Sword of sharpness 1 named "&7&lBasic sword" to loop-player 
+                give paper named "&c&lBandages" to loop-player
+                set loop-player's max health to 4
+                message "&a&lWave &6&l1"
+                wait 120 seconds
+                message "&a&lWave &6&l2"
+                message "&6 - You got a &c&lBandages" to loop-player
+                give paper named "&c&lBandages" to loop-player
+                wait 120 seconds
+                message "&a&lWave &6&l3"
+                message "&6 - You got a &c&lBandages" to loop-player
+                give paper named "&c&lBandages" to loop-player
+                wait 120 seconds
+                message "&a&lWave &6&l4"
+                message "&6 - You got a &c&lBandages" to loop-player
+                give paper named "&c&lBandages" to loop-player
+                wait 120 seconds
+                message "&a&lWave &6&l5"
+                message "&6 - You got a &c&lBandages" to loop-player
+                give paper named "&c&lBandages" to loop-player
+                wait 120 seconds
+                message "&a&lWave &6&l6"
+                message "&6 - You got a &c&lBandages" to loop-player
+                give paper named "&c&lBandages" to loop-player
+                wait 120 seconds
+                message "&a&lWave &6&l7"
+                message "&6 - You got a &c&lBandages" to loop-player
+                give paper named "&c&lBandages" to loop-player
+                wait 120 seconds
+                message "&a&lWave &6&l8 - závěrečná"
+                message "&6 - You got a &c&lBandages" to loop-player
+                give paper named "&c&lBandages" to loop-player
+                set {sa} to false
+            
+command /endapo:
+    permission: op
+    trigger:
+        set {zc} to false
+        loop all players:
+            remove all items from loop-player's inventory
+            set loop-player's max health to 10
+
+
+command /setapospawn:
+    permission: op
+    trigger: 
+        set {apospawn} to location of player
+        message "&6&lApo-Spawn was set."
+
+
+
+command /spawnmob1:
+    permission: op
+    trigger:
+        spawn a zombie at location of player
+        set maximum health of last spawned zombie  to 20
+        set health of last spawned zombie to 20
+        equip last spawned zombie with leather cap
+        set display name of last spawned zombie to "&2&lBasic Zombie"
+        
+
+command /spawnmob2:
+    permission: op
+    trigger:
+        spawn a zombie at location of player
+        set maximum health of last spawned zombie  to 50
+        set health of last spawned zombie to 50
+        set display name of last spawned zombie to "&2&lOP Zombie"
+        equip last spawned zombie with iron helmet
+command /spawnmob3:
+    permission: op
+    trigger:
+        spawn a spider at location of player
+        set maximum health of last spawned zombie  to 50
+        set health of last spawned spider to 50
+        set display name of last spawned spider to "&c&lBasic Spider"
+command /spawnmob4:
+    permission: op
+    trigger:
+        spawn a spider at location of player
+        set maximum health of last spawned spider  to 100
+        set health of last spawned spider to 100
+        set display name of last spawned spider to "&e&lBOSS &c&lSPIDER"
+        
+        
+        
+on damage:
+    if attacker is zombie:
+        name of attacker is "&2&lBasic Zombie"
+        chance of 25%:
+            apply slowness to victim for 5 seconds
+            victim is a player
+            message "&c&6Zombie has slowed you down!" to victim
+    if attacker is zombie:
+        name of attacker is "&2&lOP Zombie"
+        chance of 20%:
+            apply poison to victim for 5 seconds
+            victim is a player
+            message "&c&6Zombie poisoned you!" to victim
+    if attacker is spider:
+        name of attacker is "&c&lBasic Spider"
+        chance of 20%:
+            apply slowness to victim for 3 seconds
+            victim is a player
+            message "&c&6Bah! The spider slowed you down." to victim
+    if attacker is spider:
+        name of attacker is "&e&lBOSS &c&lSPIDER"
+        chance of 10%:
+            apply slowness to victim for 5 seconds
+            apply poison to victim for 5 seconds
+            victim is a player
+            message "&c&6Bah! BOSS Spider used his killing combo on you." to victim
+        chance of 20%:
+            apply slowness to victim for 5 seconds
+            victim is a player
+            message "BOSS Spider has slowed you down!" to victim
+
+on click:
+    if name of tool of player is "&c&lBandages":
+        add 2 to player's health 
+        remove 1 paper named "&c&lBandages" from player
+    if tool of player is gold ingot named "&6&lHP Upgrade(lvl1)":
+        set player's max health to 7
+        remove 1 gold ingot named "&6&lHP Upgrade(lvl1)" from player
+    if tool of player is diamond hoe named "&a&lSpeed wand":
+        apply speed to player for 5 seconds
+        remove 1 diamond hoe named "&a&lSpeed wand" from player
+        give 1 red wool named "&c&lLoading wand..." to player
+        wait 10 seconds 
+        remove 1 red wool named "&c&lLoading wand..." from player
+        give 1 diamond hoe named "&a&lSpeed wand" to player
+
+    
+        
+
+
+
+on death of zombie:
+    name of victim is "&2&lOP Zombie":
+        clear drops
+        drop 1 paper named "&c&lBandages" at victim
+        chance of 25%:
+            drop 1 golden sword of sharpness 3 named "&e&lA sword of pure gold" at victim
+on death of zombie:
+    name of victim is "&2&lBasic Zombie":
+        clear the drops
+        if chance of 50%:
+            set {_drop} to paper named "&c&lBandages" 
+            drop {_drop} at victim's location
+
+            
+on death of spider:
+    name of victim is "&c&lBasic Spider":
+        clear the drops
+        chance of 50%:
+            drop 1 golden sword of sharpness 3 named "&e&lA sword of pure gold" at victim
+            set {_drop} to paper named "&c&lBandages" 
+            drop {_drop} at victim's location
+on death of spider:
+    name of victim is "&e&lBOSS &c&lSPIDER":
+        chance of 40%:
+            drop 1 diamond sword of sharpness 4 named "&9&lSword of the Fallen Warrior"
+        chance of 25%:
+            drop 1 diamond hoe named "&a&lSpeed wand"
+        drop 1 paper named "&c&lBandages"
+
+
+command /zombiespawn1:
+    trigger:
+        set {zs1} to location of player
+        message "&6&lYou have set ZOMBIESPAWN1" to player
+
+command /zombiespawn2:
+    trigger:
+        set {zs2} to location of player
+        message "&6&lYou have set ZOMBIESPAWN2" to player
+
+command /zombiespawn3:
+    trigger:
+        set {zs3} to location of player
+        message "&6&lYou have set ZOMBIESPAWN3" to player
+
+command /zombiespawn4:
+    trigger:
+        set {zs4} to location of player
+        message "&6&lYou have set ZOMBIESPAWN4" to player
+
+command /zombiespawn5:
+    trigger:
+        set {zs5} to location of player
+        message "&6&lYou have set ZOMBIESPAWN5" to player
+
+every 7 seconds:
+    chance of 20%:
+        if {zs1} is not null:
+            if {zc} is true:
+                spawn a zombie at {zs1}
+                set maximum health of last spawned zombie  to 20
+                set health of last spawned zombie to 20
+                equip last spawned zombie with leather cap
+                set display name of last spawned zombie to "&2&lBasic Zombie"
+    chance of 10%:
+        if {zs1} is not null:
+            if {zc} is true:
+                spawn a zombie at {zs1}
+                set maximum health of last spawned zombie  to 50
+                set health of last spawned zombie to 50
+                set display name of last spawned zombie to "&2&lOP Zombie"
+                equip last spawned zombie with iron helmet
+    chance of 20%:
+        if {zs2} is not null:
+            if {zc} is true:
+                spawn a zombie at {zs2}
+                set maximum health of last spawned zombie  to 20
+                set health of last spawned zombie to 20
+                equip last spawned zombie with leather cap
+                set display name of last spawned zombie to "&2&lBasic Zombie"
+    chance of 10%:
+        if {zs2} is not null:
+            if {zc} is true:
+                spawn a zombie at {zs2}
+                set maximum health of last spawned zombie  to 50
+                set health of last spawned zombie to 50
+                set display name of last spawned zombie to "&2&lOP Zombie"
+                equip last spawned zombie with iron helmet
+    chance of 20%:
+        if {zs3} is not null:
+            if {zc} is true:
+                spawn a zombie at {zs3}
+                set maximum health of last spawned zombie  to 20
+                set health of last spawned zombie to 20
+                equip last spawned zombie with leather cap
+                set display name of last spawned zombie to "&2&lBasic Zombie"
+    chance of 10%:
+        if {zs3} is not null:
+            if {zc} is true:
+                spawn a zombie at {zs3}
+                set maximum health of last spawned zombie  to 50
+                set health of last spawned zombie to 50
+                set display name of last spawned zombie to "&2&lOP Zombie"
+                equip last spawned zombie with iron helmet
+    chance of 20%:
+        if {zs4} is not null:
+            if {zc} is true:
+                spawn a zombie at {zs4}
+                set maximum health of last spawned zombie  to 20
+                set health of last spawned zombie to 20
+                equip last spawned zombie with leather cap
+                set display name of last spawned zombie to "&2&lBasic Zombie"
+    chance of 10%:
+        if {zs4} is not null:
+            if {zc} is true:
+                spawn a zombie at {zs4}
+                set maximum health of last spawned zombie  to 50
+                set health of last spawned zombie to 50
+                set display name of last spawned zombie to "&2&lOP Zombie"
+                equip last spawned zombie with iron helmet
+    chance of 20%:
+        if {zs5} is not null:
+            if {zc} is true:
+                spawn a zombie at {zs5}
+                set maximum health of last spawned zombie  to 20
+                set health of last spawned zombie to 20
+                equip last spawned zombie with leather cap
+                set display name of last spawned zombie to "&2&lBasic Zombie"
+    chance of 10%:
+        if {zs5} is not null:
+            if {zc} is true:
+                spawn a zombie at {zs5}
+                set maximum health of last spawned zombie  to 50
+                set health of last spawned zombie to 50
+                set display name of last spawned zombie to "&2&lOP Zombie"
+                equip last spawned zombie with iron helmet
+    chance of 10%:
+        if {zs1} is not null:
+            if {zc} is true:
+                spawn a spider at {zs1}
+                set maximum health of last spawned spider  to 50
+                set health of last spawned spider to 50
+                set display name of last spawned spider to "&c&lBasic Spider"
+    chance of 3%:
+        if {zs1} is not null:
+            if {zc} is true:
+                spawn a spider at {zs1}
+                set maximum health of last spawned spider  to 100
+                set health of last spawned spider to 100
+                set display name of last spawned spider to "&e&lBOSS &c&lSPIDER"
+    chance of 10%:
+        if {zs2} is not null:
+            if {zc} is true:
+                spawn a spider at {zs2}
+                set maximum health of last spawned spider  to 50
+                set health of last spawned spider to 50
+                set display name of last spawned spider to "&c&lBasic Spider"
+    chance of 3%:
+        if {zs2} is not null:
+            if {zc} is true:
+                spawn a spider at {zs2}
+                set maximum health of last spawned spider  to 100
+                set health of last spawned spider to 100
+                set display name of last spawned spider to "&e&lBOSS &c&lSPIDER"
+    chance of 10%:
+        if {zs3} is not null:
+            if {zc} is true:
+                spawn a spider at {zs3}
+                set maximum health of last spawned spider  to 50
+                set health of last spawned spider to 50
+                set display name of last spawned spider to "&c&lBasic Spider"
+    chance of 3%:
+        if {zs3} is not null:
+            if {zc} is true:
+                spawn a spider at {zs3}
+                set maximum health of last spawned spider  to 100
+                set health of last spawned spider to 100
+                set display name of last spawned spider to "&e&lBOSS &c&lSPIDER"
+    chance of 10%:
+        if {zs4} is not null:
+            if {zc} is true:
+                spawn a spider at {zs4}
+                set maximum health of last spawned spider  to 50
+                set health of last spawned spider to 50
+                set display name of last spawned spider to "&c&lBasic Spider"
+    chance of 3%:
+        if {zs4} is not null:
+            if {zc} is true:
+                spawn a spider at {zs4}
+                set maximum health of last spawned spider  to 100
+                set health of last spawned spider to 100
+                set display name of last spawned spider to "&e&lBOSS &c&lSPIDER"
+    chance of 10%:
+        if {zs5} is not null:
+            if {zc} is true:
+                spawn a spider at {zs5}
+                set maximum health of last spawned spider  to 50
+                set health of last spawned spider to 50
+                set display name of last spawned spider to "&c&lBasic Spider"
+    chance of 3%:
+        if {zs5} is not null:
+            if {zc} is true:
+                spawn a spider at {zs5}
+                set maximum health of last spawned spider  to 100
+                set health of last spawned spider to 100
+                set display name of last spawned spider to "&e&lBOSS &c&lSPIDER"
+  
